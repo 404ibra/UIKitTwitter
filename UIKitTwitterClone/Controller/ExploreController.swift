@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ExploreController.swift
 //  UIKitTwitterClone
 //
 //  Created by İbrahim Aktaş on 9.02.2024.
@@ -7,12 +7,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ExploreController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+
     }
+    
 
 
 }
