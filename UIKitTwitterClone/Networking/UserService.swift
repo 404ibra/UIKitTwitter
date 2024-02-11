@@ -11,10 +11,7 @@ import Firebase
 final class UserService {
     static let shared = UserService()
     
-    func fetchUser(completion: @escaping (UserModel) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-       
-        
+    func fetchUser(uid: String, completion: @escaping (UserModel) -> Void) {
         Firestore.firestore().collection("Users").document(uid).getDocument { snapshot, error in
             guard let dictionary = snapshot?.data() as? [String : AnyObject] else { return }
             

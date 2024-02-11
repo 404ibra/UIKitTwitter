@@ -41,10 +41,14 @@ struct TweetService {
                    for document in documents {
                        do {
                            let data = document.data()
+                           
                            guard let data = data as? [String: Any] else { return }
-                          let tweet = Tweet(tweetID: fileName, dictionary: data)
-                           tweets.append(tweet)
-                           completion(tweets)
+                           guard let uid = data["uid"] as? String else { return }
+                           UserService.shared.fetchUser(uid: uid) { user in
+                               let tweet = Tweet(user: user, tweetID: fileName, dictionary: data)
+                               tweets.append(tweet)
+                               completion(tweets)
+                           }
                        } catch {
                            print("DEBUG: Error converting document to Tweet: \(error)")
                        }

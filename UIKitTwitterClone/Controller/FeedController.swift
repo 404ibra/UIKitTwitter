@@ -20,6 +20,10 @@ class FeedController: UICollectionViewController {
         }
     }
     
+    private var tweets = [Tweet]() {
+        didSet { collectionView.reloadData() }
+    }
+    
     
     //MARK: - Life Cycles
     
@@ -38,7 +42,7 @@ class FeedController: UICollectionViewController {
 extension FeedController {
     func fetchTweets() {
         TweetService.shared.fetchTweets { tweets in
-            print(tweets.count)
+            self.tweets = tweets
         }
     }
 }
@@ -74,20 +78,22 @@ extension FeedController {
     }
 }
 
-
+//MARK: - UICollectionViewDelegate/DataSource
 extension FeedController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return tweets.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        cell.tweet = tweets[indexPath.row]
         return cell
     }
 }
 
+//MARK: - UICollectionViewDelegateFlowLayout
 extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSizeMake(view.frame.width, 200)
+        return CGSizeMake(view.frame.width, 120)
     }
 }
