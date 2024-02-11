@@ -13,6 +13,7 @@ class UploadTweetController: UIViewController {
     
     //MARK: - Properties
     
+    private let captionTextView = CaptionTextView()
     private let user: UserModel
     
     private let actionButton: UIButton = {
@@ -30,6 +31,8 @@ class UploadTweetController: UIViewController {
         
         return button
     }()
+    
+    
     
     private let profileImageView: UIImageView = {
        let iv = UIImageView()
@@ -66,7 +69,14 @@ class UploadTweetController: UIViewController {
     }
     
     @objc func handleUploadTweet() {
-        
+        guard let caption = captionTextView.text else { return }
+        TweetService.shared.uploadTweet(caption: caption) { error in
+            if let error = error {
+                print("DEBUG: Error occured \(error)")
+                return
+            }
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
 //MARK: - Helpers
@@ -75,10 +85,15 @@ extension UploadTweetController {
         view.backgroundColor = .white
         configureNavigationBar()
         
-        view.addSubview(profileImageView)
-        profileImageView.snp.makeConstraints { make in
+        let stack = UIStackView(arrangedSubviews: [profileImageView, captionTextView])
+        stack.axis = .horizontal
+        stack.spacing = 12
+        
+        view.addSubview(stack)
+        stack.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(16)
             make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
         }
         guard let profilePhotoURL = URL(string: user.profileImageUrl) else { return }
         profileImageView.sd_setImage(with: profilePhotoURL, completed: nil)
