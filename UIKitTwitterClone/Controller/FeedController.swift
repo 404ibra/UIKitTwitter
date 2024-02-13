@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 import SnapKit
-
+//com
 private let reuseIdentifier = "TweetCell"
 
 class FeedController: UICollectionViewController {
@@ -86,8 +86,14 @@ extension FeedController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        
+        cell.delegate = self
         cell.tweet = tweets[indexPath.row]
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       
     }
 }
 
@@ -95,5 +101,15 @@ extension FeedController {
 extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSizeMake(view.frame.width, 120)
+    }
+}
+
+
+extension FeedController: TweetCellDelegate {
+    func handleProfileImageTapped(_ cell: TweetCell) {
+        guard let user = cell.tweet?.user else { return }
+        let controller = ProfileController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+        
     }
 }

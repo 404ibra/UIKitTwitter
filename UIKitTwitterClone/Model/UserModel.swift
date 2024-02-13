@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 
 struct UserModel: Codable {
     let fullname: String
@@ -13,6 +14,10 @@ struct UserModel: Codable {
     let username: String
     let profileImageUrl: String
     let uid: String
+    
+    var isCurrentUser: Bool {
+        return Auth.auth().currentUser?.uid == uid
+    }
     
     init(uid: String, snapshotDictionary dictionary: [String : AnyObject]) {
         self.uid = uid
